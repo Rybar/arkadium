@@ -44,12 +44,12 @@ class Level extends TileMap {
             return "checked";
         }
         this.lastTile = tile;
-        //if(tile.frame !== blank) {
+        if(tile.frame !== blank) {
             this.setFrameAtPixelPos(pos,blank);
-            tile.w1 -= 20;
+           // tile.w1 -= 100;
             return "solid";
-        //}
-        //return "cleared";
+        }
+        return "cleared";
     }
 }
 

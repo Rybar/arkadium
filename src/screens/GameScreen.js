@@ -41,7 +41,7 @@ class GameScreen extends Container {
     this.level = level;
     this.camera = camera;
     this.hero = hero;
-    console.log(level.children);
+   
   }
 
   update(dt, t) {
@@ -53,21 +53,20 @@ class GameScreen extends Container {
     pos.x = math.clamp(pos.x, left, right);
     pos.y = math.clamp(pos.y, top, bottom);
 
-    //let arr = level.children;
-    for(let i = level.mapW + 1, arr = level.children, lvl = level; i < arr.length-level.mapW; i++){
-      //console.log(arr);
-      arr[i].w2 =  (arr[i-1].w1 +
-        arr[i+1].w1 +
-        arr[i + lvl.mapW].w1 +
-        arr[i - lvl.mapW].w1 ) / 2 - arr[i].w2  //smooth value by averaging neighbors
-        arr[i].w2 = arr[i].w2 * 0.97 //magic number, is damping factor
-        
-        //arr[i].pos.y = arr[i].oy + arr[i].w2; //apply results of wave to tile position
+    //this is where the wave magic happens. I've added a couple properties to each tile, w1 and w2,
+    //to hold values from the wave buffer. 
+    
 
-        //let swap = arr[i].w2 //swap values
-        //arr[i].w2 = arr[i].w1
-        //arr[i].w1 = swap;
-    }
+      for(let i = level.mapW + 1, arr = level.children, lvl = level; i < arr.length-level.mapW; i++){
+        arr[i].w2 =  (arr[i-1].w1 +
+          arr[i+1].w1 +
+          arr[i + lvl.mapW].w1 +
+          arr[i - lvl.mapW].w1 ) / 2 - arr[i].w2  //smooth value by averaging neighbors
+          arr[i].w2 = arr[i].w2 * 0.95 //magic number, is damping factor
+      }
+
+
+    
 
     level.children.map((tile, i, arr)=>{
       tile.pos.y = tile.oy + tile.w2;
@@ -78,7 +77,7 @@ class GameScreen extends Container {
     if(controls.action){
       const ground = level.checkGround(entity.center(hero));
       if (ground === "cleared") {
-        //this.onGameOver(this.stats);
+        level.tileAtPixelPos(entity.center(hero)).w2 = 60;
       }
     }
    
