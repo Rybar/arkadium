@@ -15,11 +15,18 @@ class Level extends TileMap {
             for (let x = 0; x < mapW; x++) {
                 level.push({
                     x: math.rndInt(2)+1,
-                    y: 0
+                    y: 0,
                 });
             }
         }
         super(level, mapW, mapH, tileSize, tileSize, texture);
+
+        //additional properties for wave effects
+        this.map(tile =>{
+            tile.w1 = 0;
+            tile.w2 = 0;
+            tile.oy = tile.pos.y;
+        })
         
         this.bounds = {
             left: tileSize,
@@ -27,7 +34,7 @@ class Level extends TileMap {
             top: tileSize,
             bottom: h - tileSize * 2 
         }
-        this.blank = {x: 0, y: 0};
+        this.blank = {x: 3, y: 0};
     }
 
     checkGround(pos) {
@@ -37,11 +44,12 @@ class Level extends TileMap {
             return "checked";
         }
         this.lastTile = tile;
-        if(tile.frame !== blank) {
+        //if(tile.frame !== blank) {
             this.setFrameAtPixelPos(pos,blank);
+            tile.w1 -= 20;
             return "solid";
-        }
-        return "cleared";
+        //}
+        //return "cleared";
     }
 }
 

@@ -19,7 +19,7 @@ class KeyControls {
 
     //handle key actions
     get action () {
-        return this.keys[32];
+        return this.keys[32]; //space
     }
 
     get x () {

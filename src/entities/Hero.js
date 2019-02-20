@@ -22,7 +22,7 @@ class Hero extends TileSprite {
             ], 0.07);
         this.speed = 0.1;
         this.dir = {
-            x: 1,
+            x: 0,
             y: 0
         };
 

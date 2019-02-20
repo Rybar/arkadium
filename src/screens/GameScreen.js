@@ -9,6 +9,8 @@ class GameScreen extends Container {
 
     this.onGameOver = onGameOver;
     const level = new Level(game.w * 2, game.h * 2);
+
+    this.controls = controls;
     const hero = new Hero(controls);
     hero.pos = {
       x: 16 * Math.round(level.w/16/2),
@@ -39,22 +41,47 @@ class GameScreen extends Container {
     this.level = level;
     this.camera = camera;
     this.hero = hero;
+    console.log(level.children);
   }
 
   update(dt, t) {
     super.update(dt, t);
-    const { hero, level } = this;
+    const { hero, level, controls } = this;
     // Confine player to the level bounds
     const { pos } = hero;
     const { bounds: { top, bottom, left, right } } = level;
     pos.x = math.clamp(pos.x, left, right);
     pos.y = math.clamp(pos.y, top, bottom);
 
-    // See if we're on new ground
-    const ground = level.checkGround(entity.center(hero));
-    if (ground === "cleared") {
-      this.onGameOver(this.stats);
+    //let arr = level.children;
+    for(let i = level.mapW + 1, arr = level.children, lvl = level; i < arr.length-level.mapW; i++){
+      //console.log(arr);
+      arr[i].w2 =  (arr[i-1].w1 +
+        arr[i+1].w1 +
+        arr[i + lvl.mapW].w1 +
+        arr[i - lvl.mapW].w1 ) / 2 - arr[i].w2  //smooth value by averaging neighbors
+        arr[i].w2 = arr[i].w2 * 0.97 //magic number, is damping factor
+        
+        //arr[i].pos.y = arr[i].oy + arr[i].w2; //apply results of wave to tile position
+
+        //let swap = arr[i].w2 //swap values
+        //arr[i].w2 = arr[i].w1
+        //arr[i].w1 = swap;
     }
+
+    level.children.map((tile, i, arr)=>{
+      tile.pos.y = tile.oy + tile.w2;
+      [tile.w1 , tile.w2] = [tile.w2, tile.w1] //swap wave buffer values
+    })
+
+    // See if we're on new ground
+    if(controls.action){
+      const ground = level.checkGround(entity.center(hero));
+      if (ground === "cleared") {
+        //this.onGameOver(this.stats);
+      }
+    }
+   
   }
 }
 
