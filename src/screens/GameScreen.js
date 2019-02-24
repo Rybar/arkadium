@@ -16,7 +16,7 @@ class GameScreen extends Container {
     const level = new Level(game.w * 2, game.h * 2);
 
     this.controls = controls;
-    const waveFrames = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+    const waveFrames = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
     const hero = new Hero(controls);
     hero.pos = {
       x: 16 * Math.round(level.w/16/2),
@@ -80,7 +80,8 @@ class GameScreen extends Container {
       }
     
     level.children.map((tile, i, arr)=>{
-      //tile.pos.y = tile.oy + tile.w2;
+      tile.pos.y = tile.oy - tile.w2*64;
+      tile.scale = 1 + tile.w2*256;
       let waveFrame = math.clamp( Math.floor( math.range(tile.w2, -.4, 0.4,0,waveFrames.length) ), 0, waveFrames.length);
       tile.frame.y = waveFrames[waveFrame]; 
       [tile.w1 , tile.w2] = [tile.w2, tile.w1] //swap wave buffer values
@@ -90,7 +91,7 @@ class GameScreen extends Container {
     if(controls.action){
       const ground = level.checkGround(entity.center(hero));
       if (ground === "cleared" && this.waveCooldown < 0) {
-        level.tileAtPixelPos(entity.center(hero)).w2 = 60;
+        level.tileAtPixelPos(entity.center(hero)).w2 = 10;
         this.waveCooldown = 1;  
         
       }
@@ -99,6 +100,8 @@ class GameScreen extends Container {
     //collect pellets
     entity.hits(hero, pellets, function(pellet, pellets){
       pellets.remove(pellet);
+      level.tileAtPixelPos(entity.center(hero)).w2 = 1;
+
     });
 
     stats.end();
