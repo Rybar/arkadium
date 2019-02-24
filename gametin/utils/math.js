@@ -35,6 +35,10 @@ function clamp(x, min, max) {
 function mix(a, b, p) {
     return a * (1-p) + b * p;
 }
+
+function range(num, in_min, in_max, out_min, out_max) {
+    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
 export default {
     rndInt,
     rndFloat,
@@ -42,6 +46,7 @@ export default {
     rndOneFrom,
     distance,
     clamp,
-    mix
+    mix,
+    range
 };
 

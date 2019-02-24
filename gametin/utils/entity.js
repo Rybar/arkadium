@@ -44,7 +44,7 @@ function hits(entity, container, hitCallBack) {
             a.y + a.h >= b.y &&
             a.y <= b.y + b.h
         ) {
-            hitCallBack(e2);
+            hitCallBack(e2, container);
         }
     });
 }

@@ -1,4 +1,5 @@
 import gt from "../../gametin/index.js";
+import entity from "../../gametin/utils/entity.js";
 const { TileSprite, Texture, math } = gt;
 const texture = new Texture('./res/img/protoTiles.png');
 
@@ -51,7 +52,6 @@ class Hero extends TileSprite {
 
         pos.x += dir.x * dt * (16 / speed);
         pos.y += dir.y * dt * (16 / speed);
-
 
         
         super.update(dt);
