@@ -49,12 +49,12 @@ class GameScreen extends Container {
     this.waveFrames = waveFrames;
     this.waveCooldown = 0;
     this.pellets = pellets;
+    this.elapsedFrames = 0;
    
   }
 
   update(dt, t) {
     stats.begin();
-
     super.update(dt, t);
     const { hero, level, controls, waveFrames, pellets } = this;
     this.waveCooldown-= dt;
@@ -69,38 +69,39 @@ class GameScreen extends Container {
 
     //this is where the wave magic happens. I've added a couple properties to each tile, w1 and w2,
     //to hold values from the wave buffer. 
+    //for loop for performance sake, and I need to start and stop at specific points just inside the map grid to
+    //prevent out-of-range errors. i start is one row down and 1 cell in, i end is 1 row from bottom.
     
-
       for(let i = level.mapW + 1, arr = level.children, lvl = level; i < arr.length-level.mapW; i++){
         arr[i].w2 =  (arr[i-1].w1 +
           arr[i+1].w1 +
           arr[i + lvl.mapW].w1 +
-          arr[i - lvl.mapW].w1 ) / 2 - arr[i].w2  //smooth value by averaging neighbors
+          arr[i - lvl.mapW].w1 ) / 2 - arr[i].w2;  //smooth value by averaging neighbors
           arr[i].w2 = arr[i].w2 * 0.9 //magic number, is damping factor
       }
-    
-    level.children.map((tile, i, arr)=>{
-      tile.pos.y = tile.oy - tile.w2*100;
-      tile.scale.x = tile.scale.y = 1 + tile.w2*3;
-      let waveFrame = math.clamp( Math.floor( math.range(tile.w2, -.4, 0.4,0,waveFrames.length) ), 0, waveFrames.length);
-      tile.frame.y = waveFrames[waveFrame]; 
-      [tile.w1 , tile.w2] = [tile.w2, tile.w1] //swap wave buffer values
-    })
+
+      level.children.map((tile, i, arr)=>{
+        tile.pos.y = tile.oy - tile.w2*10;
+        tile.scale.x = tile.scale.y = 1 + tile.w2;
+        let waveFrame = math.clamp( Math.floor( math.range(tile.w2, -.4, 0.4,0,waveFrames.length) ), 0, waveFrames.length);
+        tile.frame.y = waveFrames[waveFrame]; 
+        [tile.w1 , tile.w2] = [tile.w2, tile.w1] //swap wave buffer values
+      })
+  
 
     // See if we're on new ground
-    if(controls.action){
-      const ground = level.checkGround(entity.center(hero));
-      if (ground === "cleared" && this.waveCooldown < 0) {
-        level.tileAtPixelPos(entity.center(hero)).w2 = 10; //magnitude of wave 
-        this.waveCooldown = 1;  
-        
-      }
+    // if(controls.action){
+    //   const ground = level.checkGround(entity.center(hero));
+    // }
+    if (level.checkGround(entity.center(hero)) === "cleared" && this.waveCooldown < 0) {
+      level.tileAtPixelPos(entity.center(hero)).w2 = -5; //magnitude of wave
+      this.waveCooldown = 1;   
     }
 
     //collect pellets
     entity.hits(hero, pellets, function(pellet, pellets){
       pellets.remove(pellet);
-      level.tileAtPixelPos(entity.center(hero)).w2 = 1; //magnitude of wave
+      level.tileAtPixelPos(entity.center(hero)).w2 = -.5; //magnitude of wave
 
     });
 
