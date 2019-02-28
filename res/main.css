@@ -3,7 +3,10 @@
     height: 720px;
     margin:auto;
     position: relative;
-    background-color: #222;
     image-rendering: optimizeSpeed;
     image-rendering: pixelated;
+}
+
+body {
+    background-color: #222;
 }
