@@ -1,0 +1,66 @@
+Needed for MVP:
+
+* implement tiled map
+* implement tilemap collision
+* blob detection / cached flood fills
+* dynamic tilemap drawing / modification -DUN
+* tail drawing with sprites instead of tilemap mod
+* tail tracking
+    -tail length limit depends on pellets consumed
+    -tail closed loop detection
+* blob cutting
+    - closing a loop over part of a blob will erase part of the blob
+* blob clear
+    - closing a loop over an entire blob will clear it immediately, with bonus
+    - closing a loop over a blob with perfect perimeter will clear it with PERFECT bonus
+
+----more advanced mechanics:----------------
+
+* tile gates
+    -walls on the map can be broken by the player if:
+        player has consumed prerequisite number of pellets
+        player currently has a tail of prerequisite length
+
+* tail biters
+    -mobs that patrol the map and excrement pellets in empty map cells as they pad around.
+    They don't care about you, unless you have a tail. Tails are delicious. 
+        -while drawing a tail, tailbiters increase in speed and chase your tail mercilessly.
+        -invincible? -undecided. certain map areas may be pellet-sparse, and it may be in your
+        best interest to leave these guys alone to populate the map with pellets. 
+
+----more advanced visuals:-------------------
+
+*dynamic walk/run for the player, with joints! see tiny fishing: https://2darray.itch.io/tiny-fisher
+
+*passive wave effects
+    -implement softer wave effects, undulating, over the blob tiles
+    -attack wave effects for blob slicing
+
+
+* new code needs:
+    - path finding. Implement Dykstras/A* for enemies
+        from scratch lesson in book "Advanced 2D Games" -in kindle
+    - island detection
+        -for blob drawing, we will need a blob detection and enumeration routine at runtime
+        -solution described by Chris: 
+        "Start with a second blank scoring grid, floodfill with -1's as unvisited. Start a counter for island number as 1. Loop through the game grid, marking 0 if on a tile which is not part of a blob. Upon finding a blob in the scan through, floodfill out checking for unclaimed blob in the scoring grid filling with the current island number (blob of 1's on the score grid), then increment the island number so next floodfill will be 2's. Island number when done can be used to find number of islands, will be 1 more than islands found. An island's size can then be found as the number of times the island number appears in the grid. Can also be handy for things like if a random powerup or attacking part of an island should wipe out the entire section it could apply to all tiles of matching numbers from the scoring islands grid (basically precached the floodfill calculation)"
+
+        -tail loop/lasso detection
+        -links from slack: https://stackoverflow.com/questions/30903506/detecting-closed-loop-in-a-2d-array-pattern
+    -event tracking. observer pattern / pubsub
+        -I would like to implement achievements in this game, which means I need a clean way to track events for nearly every
+         game object. link:  https://codeincomplete.com/posts/javascript-game-foundations-state-management/
+
+* MOAR POLISH -things for the trello board!
+    -achievements!
+    -routines to hit more than one tile for the wave ripple at a time, i.e. drawing a line of wave hits
+    -different wave ripple effects, currently have tried: changing tile height, changing tile sprite and scale
+    -a sprite-based text renderer
+    -sprite fonts for scoreboard, in-game bonus messages
+    - moar tilesets! lets build wild and varied levels, keeping to design constraints
+    - tall tiles: would enhance +y wave effects if tiles appeared to have 'sides' and were rendered overlapped
+        -tall tiles could add some depth and variety to maps, but need to cap height to avoid clarity issues
+    - title screen
+        -more than logo, do something dynamic, whether starfield, featuring game assets, etc. Animated
+    - game over
+        -full stats shown
