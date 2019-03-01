@@ -4,6 +4,8 @@ import Hero from "../entities/Hero.js";
 import Pellet from "../entities/Pellet.js";
 import Level from "../Level.js";
 
+const levelData = TileMaps.testMap1;
+
 var stats = new Stats();
 stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild( stats.dom );
@@ -13,7 +15,7 @@ class GameScreen extends Container {
     super();
 
     this.onGameOver = onGameOver;
-    const level = new Level(game.w * 2, game.h * 2);
+    const level = new Level(levelData);
 
     this.controls = controls;
     const waveFrames = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
@@ -30,13 +32,16 @@ class GameScreen extends Container {
         { w: level.w, h: level.h }, 0.1
       )
     );
-
+    console.log(level);
     const pellets = new Container();
-    for(let i = 0; i < 100; i++){
-      let x = Math.floor( Math.random()*level.w/16 ) * 16;
-      let y = Math.floor( Math.random()*level.h/16 ) * 16;
-      pellets.add(new Pellet(x, y));
-    }
+    pellets.children = level.pellets;
+    //old random placement
+    // for(let i = 0; i < 100; i++){
+    //   let x = Math.floor( Math.random()*level.w/16 ) * 16;
+    //   let y = Math.floor( Math.random()*level.h/16 ) * 16;
+    //   pellets.add(new Pellet(x, y));
+    // }
+
     // Add it all to the game camera
     camera.add(level);
     camera.add(pellets);
@@ -69,7 +74,7 @@ class GameScreen extends Container {
 
     //this is where the wave magic happens. I've added a couple properties to each tile, w1 and w2,
     //to hold values from the wave buffer. 
-    //for loop for performance sake, and I need to start and stop at specific points just inside the map grid to
+    //for loop  is for performance sake, and I need to start and stop at specific points just inside the map grid to
     //prevent out-of-range errors. i start is one row down and 1 cell in, i end is 1 row from bottom.
     
       for(let i = level.mapW + 1, arr = level.children, lvl = level; i < arr.length-level.mapW; i++){
@@ -81,18 +86,18 @@ class GameScreen extends Container {
       }
 
       level.children.map((tile, i, arr)=>{
+        //to create the wave effect, I'm bumping the tile's y value and scale
         tile.pos.y = tile.oy - tile.w2*10;
         tile.scale.x = tile.scale.y = 1 + tile.w2;
+        //and also the sprites frame Y value. see the spritesheet to make sense of what's happening here
         let waveFrame = math.clamp( Math.floor( math.range(tile.w2, -.4, 0.4,0,waveFrames.length) ), 0, waveFrames.length);
-        tile.frame.y = waveFrames[waveFrame]; 
-        [tile.w1 , tile.w2] = [tile.w2, tile.w1] //swap wave buffer values
+        //set the frame to further down the spritesheet
+        tile.frame.y = waveFrames[waveFrame];
+
+        //swap wave buffer values, final step of wave propogation effect
+        [tile.w1 , tile.w2] = [tile.w2, tile.w1] 
       })
   
-
-    // See if we're on new ground
-    // if(controls.action){
-    //   const ground = level.checkGround(entity.center(hero));
-    // }
     if (level.checkGround(entity.center(hero)) === "cleared" && this.waveCooldown < 0) {
       level.tileAtPixelPos(entity.center(hero)).w2 = -5; //magnitude of wave
       this.waveCooldown = 1;   

@@ -1,6 +1,6 @@
 Needed for MVP:
 
-* implement tiled map
+* implement tiled map -DUN
 * implement tilemap collision
 * blob detection / cached flood fills
 * dynamic tilemap drawing / modification -DUN

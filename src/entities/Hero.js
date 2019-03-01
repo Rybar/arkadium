@@ -16,10 +16,10 @@ class Hero extends TileSprite {
 
         const { anims } = this;
         anims.add('walk', [
-            {x: 4, y: 0 },
-            {x: 4, y: 0 },
-            {x: 4, y: 0 },
-            {x: 4, y: 0 }
+            {x: 14, y: 0 },
+            {x: 14, y: 0 },
+            {x: 14, y: 0 },
+            {x: 14, y: 0 }
             ], 0.07);
         this.speed = 0.1;
         this.dir = {

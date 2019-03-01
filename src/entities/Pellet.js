@@ -10,7 +10,7 @@ class Pellet extends TileSprite {
         this.pos.y = y;
         const { anims } = this;
         anims.add('idle', [
-            {x:5, y:0}
+            {x:15, y:0}
         ])
 
     }
