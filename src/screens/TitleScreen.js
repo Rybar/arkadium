@@ -15,7 +15,17 @@ class TitleScreen extends Container {
         for(let i = 0; i < 125; i++){
             let slice = this.add(new TileSprite(airshiptex, 126,126));
             slice.pivot = {x: 126/2, y:126/2};
+            slice.scale.y = 1;
             slice.frame.x = i;
+            slice.pos.y = 100-i;
+        }
+
+        for(let i = 0; i < 125; i++){
+            let slice = this.add(new TileSprite(airshiptex, 126,126));
+            slice.pivot = {x: 126/2, y:126/2};
+            slice.scale.y = .75;
+            slice.frame.x = i;
+            slice.pos.x = 200;
             slice.pos.y = 100-i;
         }
         // this.airship = this.add(new TileSprite(airshiptex, 126, 126));
