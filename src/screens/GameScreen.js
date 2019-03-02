@@ -1,14 +1,11 @@
 import gt from "../../gametin/index.js";
 const { Container, Camera, entity, math } = gt;
 import Hero from "../entities/Hero.js";
-import Pellet from "../entities/Pellet.js";
 import Level from "../Level.js";
 
 const levelData = TileMaps.testMap1;
 
-var stats = new Stats();
-stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
+
 
 class GameScreen extends Container {
   constructor(game, controls, onGameOver) {
@@ -35,13 +32,7 @@ class GameScreen extends Container {
     console.log(level);
     const pellets = new Container();
     pellets.children = level.pellets;
-    //old random placement
-    // for(let i = 0; i < 100; i++){
-    //   let x = Math.floor( Math.random()*level.w/16 ) * 16;
-    //   let y = Math.floor( Math.random()*level.h/16 ) * 16;
-    //   pellets.add(new Pellet(x, y));
-    // }
-
+    
     // Add it all to the game camera
     camera.add(level);
     camera.add(pellets);
@@ -59,7 +50,7 @@ class GameScreen extends Container {
   }
 
   update(dt, t) {
-    stats.begin();
+    //stats.begin();
     super.update(dt, t);
     const { hero, level, controls, waveFrames, pellets } = this;
     this.waveCooldown-= dt;
@@ -110,7 +101,7 @@ class GameScreen extends Container {
 
     });
 
-    stats.end();
+    //stats.end();
   }
   
 }

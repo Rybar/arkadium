@@ -2,11 +2,13 @@ class CanvasRenderer {
     constructor (w, h) {
         const canvas = document.createElement(`canvas`);
         canvas.setAttribute('style', 'width:100%; height:100%');
+        
         this.w = canvas.width = w;
         this.h = canvas.height = h;
         this.view = canvas;
         this.ctx = canvas.getContext(`2d`);
         this.ctx.textBaseline = 'top';
+        this.ctx.imageSmoothingEnabled = false;
     }
 
     render(container, clear = true) {

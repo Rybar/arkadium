@@ -5,6 +5,7 @@
     position: relative;
     image-rendering: optimizeSpeed;
     image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 body {

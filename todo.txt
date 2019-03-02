@@ -1,4 +1,6 @@
 Needed for MVP:
+Optimize for Huge maps
+Figure out where to stick STATS so FPS count is accurate
 
 * implement tiled map -DUN
 * implement tilemap collision

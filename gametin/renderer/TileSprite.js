@@ -9,7 +9,7 @@ class TileSprite extends Sprite {
         this.frame = {x: 0, y:0};
         this.anims = new AnimManager(this);
     }
-
+        
     update(dt) {
         this.anims.update(dt);
     }
